@@ -4,21 +4,15 @@ This is a Spring MVC (SpringBootApplication) + AngularJS project that implements
 
 ### What is this repository for? ###
 
-* Quick summary
-Sparql Endpointc clinet for the VRE4EIC Project
-* Version
-0.3
+* This is a Sparql Endpointc clinet for the VRE4EIC Project
+* Version 0.3
 
 ### How do I get set up? ###
 
-* Description of how to run it in eclipse:
-Simply run it as Java Application from the main method (Application class)
-* Database configuration
-Requires a Blazegraph running instance 
-* Deployment instructions
-Deployment instructions are no yet available
+* In eclipse, simply run it as Java Application from the main method (Application class)
+* Requires a Blazegraph running instance 
+* Deployment instructions are no yet available
 
 ### Who do I talk to? ###
 
-* Repo owner or admin
-Vangelis Kritsotakis
+* Vangelis Kritsotakis
