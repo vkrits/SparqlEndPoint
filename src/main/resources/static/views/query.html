@@ -5,28 +5,27 @@
 	
 	<div ng-controller="ResultCtrl">
 	
-	<div style="width:800px;">
-		<form id="submitForm" class="ng-valid ng-dirty" role="form" ng-submit="addRowAsyncAsJSON()" >
+	<div> <!-- style="width:800px;">-->
+		<form id="submitForm" class="ng-valid ng-dirty" role="form" ng-submit="submitAsyncQueryJSON()" >
 			<div class="form-group">
 				<label for="queryTextArea"
 					   class="control-label">
 					Please enter some query to submit (i.e. select *  where {?s ?p ?o} limit 10000):
 				</label>
-				<uib-alert class='fadeAlert' 
-			   			   style="width:800px;"
-						   ng-repeat="alert in alerts" 
-						   type="{{alert.type}}" 
-						   close="alerts.splice($index, 1);">
-  			   		{{alert.msg}}
-  				</uib-alert>
+				<div uib-alert 
+					 ng-repeat="alert in alerts" 
+					 ng-class="'alert-' + (alert.type || 'warning')" 
+					 class='fadeAlert'
+					 close="alerts.splice($index, 1);">
+					{{alert.msg}}
+				</div>
 				<textarea id="queryTextArea" 
+						  ui-codemirror="cmOption"
 						  ng-model="query" 
 						  form="submitForm" 
 						  name="query" 
-						  style="width:800px;" 
 						  rows="5" 
 						  wrap="soft"
-						  required="You must enter some text in the query field." 
 						  class="ng-valid ng-dirty">
 				</textarea>
 								
@@ -77,17 +76,20 @@
 				<tr>
 			</tfoot>
 			<tbody style="height:150px;">
-			
 				<tr ng-repeat="item in endpointResult.results" class="ng-scope">
-					
-					<td ng-repeat="column in item" class="ng-binding">{{column.value}}</td>
-					<!--
-					<td class="ng-binding">{{item.s.value}}</td>
-					<td class="ng-binding">{{item.p.value}}</td>
-					<td class="ng-binding">{{item.o.value}}</td>
-					-->
+					<td ng-repeat="column in item" class="ng-binding">
+						<span>
+							<a ng-if="column.type==='uri'" 
+							   ng-href="#/exploreInit/{{column.type}}/{{column.value | encodeURIComponent}}/true" 
+							   class="ngClickPointer">
+							   <!-- ng-click="retrieveAsyncOutgoingIncomingURIsJSON(column.type, column.value)" 
+							   		ng-href="#/exploreInit/{{row._id}}:20"-->
+								{{column.value}}
+							</a>
+						</span>
+						<span ng-if="column.type!=='uri'">{{column.value}}</span>
+					</td>
 				</tr>
-			
 			</tbody>
 		</table>
 

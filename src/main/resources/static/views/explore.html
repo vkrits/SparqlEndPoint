@@ -1,0 +1,121 @@
+<div class="section">
+    <h3>{{headingTitle}}</h3>
+    <div>
+        <uib-accordion close-others="false">
+	        <div uib-accordion-group 
+	        	class="panel-default" 
+	        	style="min-width:1000px;"
+	        	is-open="exploreStatus.isOutgoingHeaderOpen">
+	      		<uib-accordion-heading>
+	        		Outgoing Links
+					<i class="pull-right glyphicon" 
+	        		   ng-class="{'glyphicon-chevron-down': exploreStatus.isOutgoingHeaderOpen, 
+	        		   			  'glyphicon-chevron-right': !exploreStatus.isOutgoingHeaderOpen}">
+					</i>
+	      		</uib-accordion-heading>
+	      		
+	      		<!-- Some Outgoing links -->
+	      		
+	      		<div>
+					<table class="table table-striped table-condensed table-hover scrollTable">
+						<thead>
+							<tr class="ng-scope" >
+								<th ng-repeat="head in outgoingEndPointForm.result.head.vars">{{head}}</th>
+							</tr>
+						</thead>
+						<tfoot>
+							<tr>
+								<td colspan="3">
+									<div class="text-center">
+										<ul uib-pagination 
+											items-per-page="pagination.itemsPerPage"
+											total-items="pagination.outgoingTotalItems" 
+											ng-model="pagination.currentOutgoingPage"
+											max-size="pagination.maxSize" 
+											class="pagination-sm" 
+											boundary-links="true"
+											force-ellipses="true"
+											ng-change="pageOutgoingChanged()">
+										</ul>
+									</div>
+								</td>
+							<tr>
+						</tfoot>
+						<tbody style="height:150px;">
+							<tr ng-repeat="item in outgoingEndpointResult.results" class="ng-scope">
+								<td ng-repeat="column in item" class="ng-binding">
+									<span>
+										<a ng-if="column.type==='uri'" 
+										   ng-href="#/exploreInit/{{column.type}}/{{column.value | encodeURIComponent}}/true" 
+										   class="ngClickPointer">
+											{{column.value}}
+										</a>
+									</span>
+									<span ng-if="column.type!=='uri'">{{column.value}}</span>
+								</td>
+							</tr>
+						</tbody>
+					</table>				
+				</div>
+	    	</div>
+	    	<div uib-accordion-group 
+	        	class="panel-default" 
+	        	is-open="exploreStatus.isIncomingHeaderOpen">
+	      		<uib-accordion-heading>
+	        		Incoming Links
+					<i class="pull-right glyphicon" 
+	        		   ng-class="{'glyphicon-chevron-down': exploreStatus.isIncomingHeaderOpen, 
+	        		   			  'glyphicon-chevron-right': !exploreStatus.isIncomingHeaderOpen}">
+					</i>
+	      		</uib-accordion-heading>
+	      		
+	      		<!-- Some Incoming links -->
+	      		
+	      		<div>
+					<table class="table table-striped table-condensed table-hover scrollTable">
+						<thead>
+							<tr class="ng-scope">
+								<th ng-repeat="head in incomingEndPointForm.result.head.vars">{{head}}</th>
+							</tr>
+						</thead>
+						<tfoot>
+							<tr>
+								<td colspan="3">
+									<div class="text-center">
+										<ul uib-pagination 
+											items-per-page="pagination.itemsPerPage"
+											total-items="pagination.incomingTotalItems" 
+											ng-model="pagination.currentIncomingPage"
+											max-size="pagination.maxSize" 
+											class="pagination-sm" 
+											boundary-links="true"
+											force-ellipses="true"
+											ng-change="pageIncomingChanged()">
+										</ul>
+									</div>
+								</td>
+							<tr>
+						</tfoot>
+						<tbody style="height:150px;">
+							<tr ng-repeat="item in incomingEndpointResult.results" class="ng-scope">
+								<td ng-repeat="column in item" class="ng-binding">
+									<span>
+										<a ng-if="column.type==='uri'" 
+										   ng-href="#/exploreInit/{{column.type}}/{{column.value | encodeURIComponent}}/true" 
+										   class="ngClickPointer">
+											{{column.value}}
+										</a>
+									</span>
+									<span ng-if="column.type!=='uri'">{{column.value}}</span>
+								</td>
+							</tr>
+						</tbody>
+					</table>				
+				</div>
+	      		
+	    	</div>
+	    	
+	    </uib-accordion>
+
+    </div>
+</div>

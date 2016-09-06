@@ -48,3 +48,7 @@
 .scrollTable tbody {
 	overflow-y: auto;
 }
+
+.ngClickPointer {
+	cursor: pointer;
+}

@@ -4,7 +4,22 @@
  * @author Vangelis Kritsotakis
  */
 
-var app = angular.module('app', ['ngRoute','ngResource','ui.bootstrap', 'ngAnimate']);//'lazy-scroll']);
+var app = angular.module('app', ['ngRoute','ngResource','ui.bootstrap', 
+                                 'ngAnimate', 'ui.codemirror', 'app.mainServices']);//'lazy-scroll']);
+/*
+app.filter('encodeURIComponent', function() {
+    return window.encodeURIComponent;
+});
+*/
+app.filter('encodeURIComponent', function() {
+    return function(input) {
+        return encodeURIComponent(encodeURIComponent(input));
+    }; 
+})
+app.filter('decodeURIComponent', function(input) {
+    return decodeURIComponent(input);
+});
+
 app.config(function($routeProvider){
     $routeProvider
         .when('/query',{
@@ -14,6 +29,17 @@ app.config(function($routeProvider){
         .when('/roles',{
             templateUrl: '/views/roles.html',
             controller: 'rolesController'
+        })
+        .when('/explore',{
+            templateUrl: '/views/explore.html',
+            controller: 'exploreController'
+        })
+        .when('/exploreInit/:type/:uri/:init',{
+            templateUrl: '/views/explore.html',
+            controller: 'exploreController'/*
+            resolve: {
+            	testObj:  'submitQueryService.getOutgoingIncomingResults({uri: "http://purl.obolibrary.org/obo/BFO_0000051", itemsPerPage: 20})'
+            }*/
         })
         .otherwise(
             { redirectTo: '/'}

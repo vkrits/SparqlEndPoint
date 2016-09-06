@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * Pojo (Plain Old Java Object) used for the structure of messages exchanged 
- * between angularJS the paginator and Spring
+ * between angularJS the pagination and Spring
  * 
  * @author Vangelis Kritsotakis
  */
