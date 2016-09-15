@@ -161,13 +161,32 @@ app.controller('exploreController', [ '$scope', '$http', 'modalService', '$locat
 	};
 	
 	// INIT
+	
+	// Case of explorer
 	if($routeParams.init == 'true') {
-		$scope.headingTitle = "Explore URIs";
-		$scope.retrieveAsyncOutgoingIncomingURIsJSON($routeParams.type, decodeURIComponent($routeParams.uri));
-		//$scope.welcomeFunc();
+		
+		// Retrieve rdf.base
+		submitQueryService.getRdfBase()
+		.success(function(data, status, headers, config) {
+			// Example:			http://localhost:8080/root#/E1.CRM_Entity
+			// rdfBase:			http://localhost:8080
+			// rdfAfterbase:	root
+			$scope.rdfBase = data.rdfBase;
+			$scope.rdfAfterbase = data.rdfAfterbase;
+			
+			// Actions regarding explorer:
+			$scope.headingTitle = "Explore URIs";
+			$scope.retrieveAsyncOutgoingIncomingURIsJSON($routeParams.type, decodeURIComponent($routeParams.uri));
+			//$scope.welcomeFunc();
+		}).error(function(data, status, headers, config) {
+		    $scope.message2 = 'There was a network error. Try again later.';
+			alert("failure message: There was a network error. Try again later.\n" + JSON.stringify({
+				data : data
+			}));
+		});
 	}
 	
-	// case of resolver
+	// Case of resolver
 	if($routeParams.uriToResolve != null) {
 		
 		// Retrieve rdf.base
@@ -178,6 +197,7 @@ app.controller('exploreController', [ '$scope', '$http', 'modalService', '$locat
 			// rdfAfterbase:	root
 			$scope.rdfBase = data.rdfBase;
 			$scope.rdfAfterbase = data.rdfAfterbase;
+			
 			// Actions regarding resolver:
 			$scope.headingTitle = "URI Resolver";
 			// Retrieving incoming / outgoing URIs (first page)
@@ -260,57 +280,77 @@ app.controller("ResultCtrl", [ '$scope', '$http', 'modalService', 'submitQuerySe
 	$scope.queryList = [{}];
 	
 	$scope.submitAsyncQueryJSON = function() {
-
-		var dataObj = {
-			query : $scope.query,
-			itemsPerPage : $scope.itemsPerPage
-		};
 		
-		if ($scope.query == null || $scope.query == '') {
-			$scope.alerts.splice(0); // Close alerts
-			$scope.alerts.push({type: 'warning', msg: 'Please enter some text in the query field and try again!'});
-		}
+		// First, we retrieve rdf.base
+		submitQueryService.getRdfBase()
+		.success(function(data, status, headers, config) {
+			// Example:			http://localhost:8080/root#/E1.CRM_Entity
+			// rdfBase:			http://localhost:8080
+			// rdfAfterbase:	root
+			$scope.rdfBase = data.rdfBase;
+			$scope.rdfAfterbase = data.rdfAfterbase;
+			
+			// Then do some Submit stuff
 		
-		// Only if not empty
-		else {
-
-			// Modal
-			var modalInstance = modalService.showModal(modalDefaults, modalOptions);
+			var dataObj = {
+				query : $scope.query,
+				itemsPerPage : $scope.itemsPerPage
+			};
 			
-			submitQueryService.getQueryResults(dataObj)
-			.success(function(data, status, headers, config) {
+			if ($scope.query == null || $scope.query == '') {
+				$scope.alerts.splice(0); // Close alerts
+				$scope.alerts.push({type: 'warning', msg: 'Please enter some text in the query field and try again!'});
+			}
+		
+			// Only if not empty
+			else {
+	
+				// Modal
+				var modalInstance = modalService.showModal(modalDefaults, modalOptions);
 				
-				$scope.statusRequestInfo = data.statusRequestInfo;
-				$scope.queryList.push({ 'query':$scope.query, 'statusRequestInfo':$scope.statusRequestInfo });
+				submitQueryService.getQueryResults(dataObj)
+				.success(function(data, status, headers, config) {
+					
+					$scope.statusRequestInfo = data.statusRequestInfo;
+					$scope.queryList.push({ 'query':$scope.query, 'statusRequestInfo':$scope.statusRequestInfo });
+					
+					// Close alerts
+					$scope.alerts.splice(0);
+					
+					// Checking the response from blazegraph
+					if(data.statusRequestCode == '200') {
+						$scope.lastEndPointForm = data;
+						$scope.endpointResult = data.result;
+						$scope.totalItems = data.totalItems;
+						$scope.currentPage = 1;
+						$scope.alerts.push({type: 'success', msg: 'The query was submitted succesfuly'});
+					}
+					else if(data.statusRequestCode == '400') {
+						$scope.alerts.push({type: 'danger', msg: data.statusRequestInfo + '. Please check the query for syntax errors and try again.'});
+					}
+					else {
+						$scope.alerts.push({type: 'danger', msg: data.statusRequestInfo});
+					}
+					modalInstance.close();
+				})
+				.error(function() {
+					$scope.message = 'There was a network error. Try again later.';
+					alert("failure message: " + message + "\n" + JSON.stringify({
+						data : data
+					}));
+					modalInstance.close();
+				});
 				
-				// Close alerts
-				$scope.alerts.splice(0);
-				
-				// Checking the response from blazegraph
-				if(data.statusRequestCode == '200') {
-					$scope.lastEndPointForm = data;
-					$scope.endpointResult = data.result;
-					$scope.totalItems = data.totalItems;
-					$scope.currentPage = 1;
-					$scope.alerts.push({type: 'success', msg: 'The query was submitted succesfuly'});
-				}
-				else if(data.statusRequestCode == '400') {
-					$scope.alerts.push({type: 'danger', msg: data.statusRequestInfo + '. Please check the query for syntax errors and try again.'});
-				}
-				else {
-					$scope.alerts.push({type: 'danger', msg: data.statusRequestInfo});
-				}
-				modalInstance.close();
-			})
-			.error(function() {
-				$scope.message = 'There was a network error. Try again later.';
-				alert("failure message: " + message + "\n" + JSON.stringify({
-					data : data
-				}));
-				modalInstance.close();
-			});
+			}
 			
-		}
+			// Submit stuff Ends here
+			
+		}).error(function(data, status, headers, config) {
+		    $scope.message2 = 'There was a network error. Try again later.';
+			alert("failure message: There was a network error. Try again later.\n" + JSON.stringify({
+				data : data
+			}));
+		});
 		
 	}
 	

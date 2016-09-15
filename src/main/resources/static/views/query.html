@@ -62,15 +62,7 @@
 								force-ellipses="true"
 								ng-change="pageChanged()">
 							</ul>
-							<!--
-							<button id="single-button" 
-									type="button" 
-									class="btn btn-primary" 
-									uib-dropdown-toggle ng-disabled="disabled">
-	        					20 
-	        					<span class="caret"></span>
-      						</button>
-      						-->
+							
 						</div>
 					</td>
 				<tr>
@@ -79,13 +71,14 @@
 				<tr ng-repeat="item in endpointResult.results" class="ng-scope">
 					<td ng-repeat="column in item" class="ng-binding">
 						<span>
-							<a ng-if="column.type==='uri'" 
+							<a ng-if="column.type==='uri' && column.value.indexOf(rdfBase)===0" 
 							   ng-href="#/exploreInit/{{column.type}}/{{column.value | encodeURIComponent}}/true" 
 							   class="ngClickPointer">
-							   <!-- ng-click="retrieveAsyncOutgoingIncomingURIsJSON(column.type, column.value)" 
-							   		ng-href="#/exploreInit/{{row._id}}:20"-->
 								{{column.value}}
 							</a>
+							<span ng-if="column.type==='uri' && column.value.indexOf(rdfBase)===-1">
+								{{column.value}}
+							</span>
 						</span>
 						<span ng-if="column.type!=='uri'">{{column.value}}</span>
 					</td>
