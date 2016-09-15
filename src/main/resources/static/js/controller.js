@@ -14,7 +14,6 @@ app.controller('rolesController', function($scope) {
 
 app.controller('exploreController', [ '$scope', '$http', 'modalService', '$location', 'submitQueryService', '$routeParams',
                                       function($scope, $http, modalService, $location, submitQueryService, $routeParams) {
-	$scope.headingTitle = "Explore Query";
 	
 	// Modal Configuration
 	var modalOptions = {
@@ -34,7 +33,7 @@ app.controller('exploreController', [ '$scope', '$http', 'modalService', '$locat
 		maxSize: 5,
 		currentOutgoingPage: 1,
 		currentIncomingPage: 1,
-		itemsPerPage: 5
+		itemsPerPage: 10
 	};
 		
 	$scope.exploreStatus = {
@@ -132,6 +131,7 @@ app.controller('exploreController', [ '$scope', '$http', 'modalService', '$locat
 			
 			// Checking the response from blazegraph (incoming)
 			if(data.incomingEndPointForm.statusRequestCode == '200') {
+				
 				$scope.incomingEndPointForm = data.incomingEndPointForm;
 				$scope.incomingEndpointResult = data.incomingEndPointForm.result;
 				$scope.pagination.incomingTotalItems = data.incomingEndPointForm.totalItems;
@@ -162,8 +162,32 @@ app.controller('exploreController', [ '$scope', '$http', 'modalService', '$locat
 	
 	// INIT
 	if($routeParams.init == 'true') {
+		$scope.headingTitle = "Explore URIs";
 		$scope.retrieveAsyncOutgoingIncomingURIsJSON($routeParams.type, decodeURIComponent($routeParams.uri));
 		//$scope.welcomeFunc();
+	}
+	
+	// case of resolver
+	if($routeParams.uriToResolve != null) {
+		
+		// Retrieve rdf.base
+		submitQueryService.getRdfBase()
+		.success(function(data, status, headers, config) {
+			// Example:			http://localhost:8080/root#/E1.CRM_Entity
+			// rdfBase:			http://localhost:8080
+			// rdfAfterbase:	root
+			$scope.rdfBase = data.rdfBase;
+			$scope.rdfAfterbase = data.rdfAfterbase;
+			// Actions regarding resolver:
+			$scope.headingTitle = "URI Resolver";
+			// Retrieving incoming / outgoing URIs (first page)
+			$scope.retrieveAsyncOutgoingIncomingURIsJSON(5, $scope.rdfBase + '/' + $scope.rdfAfterbase + '#/' + $routeParams.uriToResolve);
+		}).error(function(data, status, headers, config) {
+		    $scope.message2 = 'There was a network error. Try again later.';
+			alert("failure message: There was a network error. Try again later.\n" + JSON.stringify({
+				data : data
+			}));
+		});
 	}
 	
 } ]);

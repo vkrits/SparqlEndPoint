@@ -20,7 +20,6 @@ import org.openrdf.rio.RDFFormat;
 
 public class BlazegraphRepRestful {
 
-    //private RemoteRepositoryManager repository;
     private String serviceUrl;
     private Client clientPool;
 

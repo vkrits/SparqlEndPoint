@@ -54,6 +54,19 @@ angular.module('app.mainServices', [])
 			})
 			.error(function(err) {
 			});
+		},
+		getRdfBase : function() {
+			return $http({
+				'url' : '/config_properties',
+				'method' : 'Get',
+				'headers' : {
+					'Content-Type' : 'application/json'
+				}
+			}).success(function(data, status, headers, config) {
+				return data;
+			})
+			.error(function(err) {
+			});
 		}
 	}
 

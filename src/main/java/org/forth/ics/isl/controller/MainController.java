@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 
+import org.forth.ics.isl.data.model.ConfigProperty;
 import org.forth.ics.isl.data.model.EndPointDataPage;
 import org.forth.ics.isl.data.model.EndPointForm;
 import org.forth.ics.isl.data.model.IncomingOutgoingURIs;
@@ -13,12 +15,17 @@ import org.forth.ics.isl.enums.QueryResultFormat;
 import org.forth.ics.isl.service.BlazegraphRepRestful;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -35,18 +42,19 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Controller
 public class MainController {
-	
-	//@Autowired
-    //private Environment environment;
-	
+		
 	@Value("${triplestore.url}")
-	private String service;// = environment.getProperty("triplestore.url");
-    //String service = "http://139.91.183.88:9999/blazegraph";
-    //String service = "http://localhost:9999/blazegraph";
-	private BlazegraphRepRestful blaze;// = new BlazegraphRepRestful(service);
-	private JsonNode currQueryResult;// = new ObjectNode(JsonNodeFactory.instance);
-	private JsonNode outgoingUrisResult;// = new ObjectNode(JsonNodeFactory.instance);
-	private JsonNode incomingUrisResult;// = new ObjectNode(JsonNodeFactory.instance);
+	private String service; // = environment.getProperty("triplestore.url");
+	@Value("${triplestore.namespace}")
+	private String namespace;
+	@Value("${rdf.base}")
+	private String rdfBase;
+	@Value("${rdf.afterbase}")
+	private String rdfAfterbase;
+	private BlazegraphRepRestful blaze;
+	private JsonNode currQueryResult;
+	private JsonNode outgoingUrisResult;
+	private JsonNode incomingUrisResult;
 	
     @PostConstruct
     public void init() {
@@ -67,8 +75,91 @@ public class MainController {
     	return new ModelAndView("httpservice_post_json");
     }
     
-    
-    
+    @RequestMapping(value = "/prefix/{afterfix}/**", method = RequestMethod.GET)
+    public @ResponseBody IncomingOutgoingURIs find(@PathVariable String afterfix, WebRequest request, HttpServletRequest httpServletRequest) {
+    	
+    	String url = httpServletRequest.getRequestURI();
+		System.out.println("url: " + url);
+        String mvcPath = (String) request.getAttribute(
+        		HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE, RequestAttributes.SCOPE_REQUEST);
+    	
+        //System.out.println("mvcPrefix: " + mvcPrefix);
+        System.out.println("mvcPath: " + mvcPath);
+    	    	
+        String uri = rdfBase + mvcPath;
+        //String uri = rdfBase + "/prefix/" + afterfix + "/";
+        
+    	int itemsPerPage = 20;
+    	System.out.println("Retrieving info for URI: " + uri);
+    	
+    	// Used in order to hold everything and then be returned
+    	IncomingOutgoingURIs incomingOutgoingURIs = new IncomingOutgoingURIs();
+    	incomingOutgoingURIs.setUri(uri);
+    	
+    	// Retrieving Outgoing URIs
+    	
+    	// POJO EndPointForm instance, used for holding Outgoing URIs
+    	EndPointForm outgoingEndPointForm = new EndPointForm();
+    	outgoingEndPointForm.setItemsPerPage(itemsPerPage);
+    	
+    	// Setting query
+    	String outgoingQueryStr = "select * where {<" + uri + "> ?p ?o}";
+    	outgoingEndPointForm.setQuery(outgoingQueryStr);
+    	
+    	// Retrieving items based on query an holding them in EndPointForm POJO
+    	outgoingEndPointForm = retrieveBasedOnQuery(outgoingEndPointForm);
+    	
+    	// Checking saved status
+    	if (outgoingEndPointForm.getStatusRequestCode() == 200) {
+    	
+	    	// Holding globaly the whole results, which can be a lot.
+    		outgoingUrisResult = outgoingEndPointForm.getResult();
+	    	
+	    	// Holding the first page results in a separate JsonNode
+			JsonNode firstPageQueryResult = getDataOfPageForCurrentEndPointForm(1, outgoingEndPointForm.getItemsPerPage(), "outgoing");
+			
+			// Re-setting results (overwriting the old ones) for the response, 
+			// such that it holds only those appearing at the first page
+			outgoingEndPointForm.setResult(firstPageQueryResult);
+			
+			// Set to IncomingOutgoingURIs
+			incomingOutgoingURIs.setOutgoingEndPointForm(outgoingEndPointForm);
+			
+    	}
+    	    	
+    	// Retrieving Incoming URIs
+    	
+    	// POJO EndPointForm instance used for holding the incoming URIs
+    	EndPointForm incomingEndPointForm = new EndPointForm();
+    	incomingEndPointForm.setItemsPerPage(itemsPerPage);
+    	
+    	// Setting query
+    	String incomingQueryStr = "select * where { ?s ?p <" + incomingOutgoingURIs.getUri() + ">}";
+    	incomingEndPointForm.setQuery(incomingQueryStr);
+    	
+    	// Retrieving items based on query an holding them in EndPointForm POJO
+    	incomingEndPointForm = retrieveBasedOnQuery(incomingEndPointForm);
+    	
+    	// Checking saved status
+    	if (incomingEndPointForm.getStatusRequestCode() == 200) {
+    	
+	    	// Holding globaly the whole results, which can be a lot.
+    		incomingUrisResult = incomingEndPointForm.getResult();
+	    	
+	    	// Holding the first page results in a separate JsonNode
+			JsonNode firstPageQueryResult = getDataOfPageForCurrentEndPointForm(1, incomingEndPointForm.getItemsPerPage(), "incoming");
+			
+			// Re-setting results (overwriting the old ones) for the response, 
+			// such that it holds only those appearing at the first page
+			incomingEndPointForm.setResult(firstPageQueryResult);
+			
+			// Set to IncomingOutgoingURIs
+			incomingOutgoingURIs.setIncomingEndPointForm(incomingEndPointForm);
+    	}
+
+    	return incomingOutgoingURIs;
+	
+    }
     
     
     
@@ -85,7 +176,7 @@ public class MainController {
     private EndPointForm retrieveBasedOnQuery(EndPointForm endPointForm) {
 
     	try {
-    		Response blazeResponce = blaze.executeSparqlQuery(endPointForm.getQuery(), "testnamespace", QueryResultFormat.JSON);
+    		Response blazeResponce = blaze.executeSparqlQuery(endPointForm.getQuery(), namespace, QueryResultFormat.JSON);
     		System.out.println("blazeResponce.getStatus(): "  + blazeResponce.getStatusInfo());
     		
     		// Setting Response status to POJO
@@ -306,5 +397,18 @@ public class MainController {
     	return resultObjectNode;
     	
     }
+    
+    /**
+     * Request get for retrieving the rdf.base attribute retrieved from the config.properties file
+     *
+     * @return 	A String holding the rdf.base
+     */
+    @RequestMapping(value = "/config_properties", method = RequestMethod.GET, produces={"application/json"})
+	public @ResponseBody ConfigProperty retrieveRdfBase() {
+    	ConfigProperty configProperty = new ConfigProperty();
+    	configProperty.setRdfBase(rdfBase);
+    	configProperty.setRdfAfterbase(rdfAfterbase);
+		return configProperty;
+	}
         
 }

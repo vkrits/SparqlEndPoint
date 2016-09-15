@@ -20,11 +20,18 @@ app.filter('decodeURIComponent', function(input) {
     return decodeURIComponent(input);
 });
 
-app.config(function($routeProvider){
+app.config(function($routeProvider, $locationProvider) {
+	
+	//$locationProvider.hashPrefix(); // Removes index.html in URL
+	
     $routeProvider
-        .when('/query',{
+	    .when('/query',{
             templateUrl: '/views/query.html',
             controller: 'queryController'
+        })
+        .when('/:uriToResolve',{
+            templateUrl: '/views/explore.html',
+            controller: 'exploreController'
         })
         .when('/roles',{
             templateUrl: '/views/roles.html',
@@ -41,9 +48,10 @@ app.config(function($routeProvider){
             	testObj:  'submitQueryService.getOutgoingIncomingResults({uri: "http://purl.obolibrary.org/obo/BFO_0000051", itemsPerPage: 20})'
             }*/
         })
-        .otherwise(
-            { redirectTo: '/'}
-        );
+        .otherwise({ 
+        	redirectTo: '/'
+        });
+    
 });
 
 app.config(['$httpProvider', function ($httpProvider) {    
