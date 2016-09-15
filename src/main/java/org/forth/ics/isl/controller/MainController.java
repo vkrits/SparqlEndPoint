@@ -7,6 +7,8 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 
+import org.springframework.context.annotation.ScopedProxyMode;
+
 import org.forth.ics.isl.data.model.ConfigProperty;
 import org.forth.ics.isl.data.model.EndPointDataPage;
 import org.forth.ics.isl.data.model.EndPointForm;
@@ -14,8 +16,8 @@ import org.forth.ics.isl.data.model.IncomingOutgoingURIs;
 import org.forth.ics.isl.enums.QueryResultFormat;
 import org.forth.ics.isl.service.BlazegraphRepRestful;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,6 +42,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  * @author Vangelis Kritsotakis
  */
 
+@Scope(scopeName="session", proxyMode=ScopedProxyMode.TARGET_CLASS)
 @Controller
 public class MainController {
 		

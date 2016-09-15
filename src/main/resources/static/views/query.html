@@ -76,9 +76,10 @@
 							   class="ngClickPointer">
 								{{column.value}}
 							</a>
-							<span ng-if="column.type==='uri' && column.value.indexOf(rdfBase)===-1">
+							<a ng-if="column.type==='uri' && column.value.indexOf(rdfBase)===-1" 
+							   ng-href="{{column.value}}">
 								{{column.value}}
-							</span>
+							</a>
 						</span>
 						<span ng-if="column.type!=='uri'">{{column.value}}</span>
 					</td>
