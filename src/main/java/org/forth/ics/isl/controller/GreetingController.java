@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class GreetingController {
-
+	
+	// This should be gone
 	@RequestMapping(value = "/greeting", method = RequestMethod.GET)
 	public String greeting(@RequestParam(value = "name", required = false, defaultValue = "World") String name,
 			Model model) {
