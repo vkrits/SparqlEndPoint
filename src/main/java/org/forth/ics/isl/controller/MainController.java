@@ -42,6 +42,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  * @author Vangelis Kritsotakis
  */
 
+// Check out @Scope("prototype")
+
 @Scope(scopeName="session", proxyMode=ScopedProxyMode.TARGET_CLASS)
 @Controller
 public class MainController {

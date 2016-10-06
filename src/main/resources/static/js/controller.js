@@ -168,7 +168,7 @@ app.controller('exploreController', [ '$scope', '$http', 'modalService', '$locat
 		// Retrieve rdf.base
 		submitQueryService.getRdfBase()
 		.success(function(data, status, headers, config) {
-			// Example:			http://localhost:8080/root#/E1.CRM_Entity
+			// Example:			http://localhost:8080/root/E1.CRM_Entity
 			// rdfBase:			http://localhost:8080
 			// rdfAfterbase:	root
 			$scope.rdfBase = data.rdfBase;
@@ -192,7 +192,7 @@ app.controller('exploreController', [ '$scope', '$http', 'modalService', '$locat
 		// Retrieve rdf.base
 		submitQueryService.getRdfBase()
 		.success(function(data, status, headers, config) {
-			// Example:			http://localhost:8080/root#/E1.CRM_Entity
+			// Example:			http://localhost:8080/root/E1.CRM_Entity
 			// rdfBase:			http://localhost:8080
 			// rdfAfterbase:	root
 			$scope.rdfBase = data.rdfBase;
@@ -201,7 +201,7 @@ app.controller('exploreController', [ '$scope', '$http', 'modalService', '$locat
 			// Actions regarding resolver:
 			$scope.headingTitle = "URI Resolver";
 			// Retrieving incoming / outgoing URIs (first page)
-			$scope.retrieveAsyncOutgoingIncomingURIsJSON(5, $scope.rdfBase + '/' + $scope.rdfAfterbase + '#/' + $routeParams.uriToResolve);
+			$scope.retrieveAsyncOutgoingIncomingURIsJSON(5, $scope.rdfBase + '/' + $scope.rdfAfterbase + '/' + $routeParams.uriToResolve);
 		}).error(function(data, status, headers, config) {
 		    $scope.message2 = 'There was a network error. Try again later.';
 			alert("failure message: There was a network error. Try again later.\n" + JSON.stringify({
@@ -284,7 +284,7 @@ app.controller("ResultCtrl", [ '$scope', '$http', 'modalService', 'submitQuerySe
 		// First, we retrieve rdf.base
 		submitQueryService.getRdfBase()
 		.success(function(data, status, headers, config) {
-			// Example:			http://localhost:8080/root#/E1.CRM_Entity
+			// Example:			http://localhost:8080/root/E1.CRM_Entity
 			// rdfBase:			http://localhost:8080
 			// rdfAfterbase:	root
 			$scope.rdfBase = data.rdfBase;

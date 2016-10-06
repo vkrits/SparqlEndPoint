@@ -29,7 +29,7 @@ app.config(function($routeProvider, $locationProvider) {
             templateUrl: '/views/query.html',
             controller: 'queryController'
         })
-        .when('/:uriToResolve',{
+        .when('/root/:uriToResolve',{
             templateUrl: '/views/explore.html',
             controller: 'exploreController'
         })
@@ -47,10 +47,9 @@ app.config(function($routeProvider, $locationProvider) {
             resolve: {
             	testObj:  'submitQueryService.getOutgoingIncomingResults({uri: "http://purl.obolibrary.org/obo/BFO_0000051", itemsPerPage: 20})'
             }*/
-        })
-        .otherwise({ 
-        	redirectTo: '/'
         });
+		
+    $locationProvider.html5Mode(true);
     
 });
 
