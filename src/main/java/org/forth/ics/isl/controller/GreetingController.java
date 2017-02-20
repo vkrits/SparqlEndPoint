@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class GreetingController {
 	
-	// This should be gone
+	// This should be gone (left from tutorial)
 	@RequestMapping(value = "/greeting", method = RequestMethod.GET)
 	public String greeting(@RequestParam(value = "name", required = false, defaultValue = "World") String name,
 			Model model) {
