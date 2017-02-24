@@ -25,7 +25,7 @@ public class MyWebMvcConfig extends WebMvcConfigurerAdapter {
 			"/explore", 
 			"/roles", 
 			"/exploreInit/**",
-			"/root/**"
+			"/${rdf.afterbase}/**"
 		})
 		public String index() {
 			return "forward:/index.html";
