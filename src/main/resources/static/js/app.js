@@ -29,7 +29,7 @@ app.config(function($routeProvider, $locationProvider) {
             templateUrl: '/views/query.html',
             controller: 'queryController'
         })
-        .when('/root/:uriToResolve',{
+        .when('/localtest/:uriToResolve',{
             templateUrl: '/views/explore.html',
             controller: 'exploreController'
         })
