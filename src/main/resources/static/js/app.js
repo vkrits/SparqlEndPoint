@@ -29,7 +29,8 @@ app.config(function($routeProvider, $locationProvider) {
             templateUrl: '/views/query.html',
             controller: 'queryController'
         })
-        .when('/localtest/:uriToResolve',{
+        // By simply using :afterbase I can use dynamic route (it could be :whatever)
+        .when('/:afterbase/:uriToResolve',{
             templateUrl: '/views/explore.html',
             controller: 'exploreController'
         })
@@ -56,4 +57,3 @@ app.config(function($routeProvider, $locationProvider) {
 app.config(['$httpProvider', function ($httpProvider) {    
 	$httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
 }]);
-

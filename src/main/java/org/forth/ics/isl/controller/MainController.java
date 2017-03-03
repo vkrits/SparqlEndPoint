@@ -394,7 +394,7 @@ public class MainController {
     		}
     	}
     	  	
-    	// Final ResultObject
+    	// Final ResultObject 
     	ObjectNode resultObjectNode = new ObjectNode(factory);
     	resultObjectNode.set("head", varsObjectNode);
     	resultObjectNode.set("results", bindingsArrayNode);

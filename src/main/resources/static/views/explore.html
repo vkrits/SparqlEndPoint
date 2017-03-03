@@ -45,12 +45,19 @@
 							<tr ng-repeat="item in outgoingEndpointResult.results" class="ng-scope">
 								<td ng-repeat="column in item" class="ng-binding">
 									<span>
+										<!--
 										<a ng-if="column.type==='uri' && column.value.indexOf(rdfBase)===0" 
 										   ng-href="/exploreInit/{{column.type}}/{{column.value | encodeURIComponent}}/true" 
 										   class="ngClickPointer">
 											{{column.value}}
 										</a>
 										<a ng-if="column.type==='uri' && column.value.indexOf(rdfBase)===-1" 
+										   ng-href="{{column.value}}">
+											{{column.value}}
+										</a>
+										-->
+										<!-- Using the resolver directly -->
+										<a ng-if="column.type==='uri'" 
 										   ng-href="{{column.value}}">
 											{{column.value}}
 										</a>
@@ -104,12 +111,18 @@
 							<tr ng-repeat="item in incomingEndpointResult.results" class="ng-scope">
 								<td ng-repeat="column in item" class="ng-binding">
 									<span>
+									<!--
 										<a ng-if="column.type==='uri' && column.value.indexOf(rdfBase)===0" 
 										   ng-href="/exploreInit/{{column.type}}/{{column.value | encodeURIComponent}}/true" 
 										   class="ngClickPointer">
 											{{column.value}}
 										</a>
 										<a ng-if="column.type==='uri' && column.value.indexOf(rdfBase)===-1" 
+										   ng-href="{{column.value}}">
+											{{column.value}}
+										</a>
+										-->
+										<a ng-if="column.type==='uri'" 
 										   ng-href="{{column.value}}">
 											{{column.value}}
 										</a>

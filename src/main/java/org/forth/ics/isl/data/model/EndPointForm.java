@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * Pojo (Plain Old Java Object) used for the structure of messages exchanged 
- * between angularJS sparQL Query submission and Spring
+ * between angularJS sparQL Query submission and Spring 
  * 
  * @author Vangelis Kritsotakis
  */

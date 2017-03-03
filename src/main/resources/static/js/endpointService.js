@@ -1,5 +1,5 @@
 /**
- * The main angularJS service to hold the factories
+ * The main angularJS service to hold the factories 
  * 
  * @author Vangelis Kritsotakis
  */
