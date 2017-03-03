@@ -2,7 +2,7 @@ package org.forth.ics.isl.data.model;
 
 /**
  * Pojo (Plain Old Java Object) used for the structure of messages exchanged 
- * between angularJS Spring for the resolver
+ * between angularJS Spring for the resolver 
  * 
  * @author Vangelis Kritsotakis
  */

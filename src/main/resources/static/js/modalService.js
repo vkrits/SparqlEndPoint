@@ -1,5 +1,5 @@
 /**
- * A service for the modal to be used in the app from anywhere
+ * A service for the modal to be used in the app from anywhere 
  * 
  * @author Vangelis Kritsotakis
  */
