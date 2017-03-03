@@ -29,3 +29,6 @@ public class Application {
     }
 
 }
+
+// Tomcat
+//http://stackoverflow.com/questions/39187237/deploying-spring-boot-war-to-tomcat-8-http-404-when-accessing-resources
