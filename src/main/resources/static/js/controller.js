@@ -67,17 +67,17 @@ app.controller('exploreController', [ '$scope', '$http', 'modalService', '$locat
 		}
 		
 		submitQueryService.getPageResults(pageParams)
-		.success(function(data, status, headers, config) {
+		.then(function(success) {
 			if(action == 'outgoing') {
-				$scope.outgoingEndpointResult = data.result;
+				$scope.outgoingEndpointResult = success.result;
 			}
 			else if(action == 'incoming') {
-				$scope.incomingEndpointResult = data.result;
+				$scope.incomingEndpointResult = success.result;
 			}
-		}).error(function(data, status, headers, config) {
+		}, function (error) {
 		    $scope.message2 = 'There was a network error. Try again later.';
 			alert("failure message: " + message2 + "\n" + JSON.stringify({
-				data : data
+				data : error.data
 			}));
 		});
 	}	
@@ -106,54 +106,54 @@ app.controller('exploreController', [ '$scope', '$http', 'modalService', '$locat
 		
 		// Post
 		submitQueryService.getOutgoingIncomingResults(dataObj)
-		.success(function(data, status, headers, config) {
+		.then(function(success) {
 			
 			// Checking the response from blazegraph (outgoing)
-			if(data.outgoingEndPointForm.statusRequestCode == '200') {
+			if(success.outgoingEndPointForm.statusRequestCode == '200') {
 				
-				$scope.outgoingEndPointForm = data.outgoingEndPointForm;
-				$scope.outgoingEndpointResult = data.outgoingEndPointForm.result;
-				$scope.pagination.outgoingTotalItems = data.outgoingEndPointForm.totalItems;
+				$scope.outgoingEndPointForm = success.outgoingEndPointForm;
+				$scope.outgoingEndpointResult = success.outgoingEndPointForm.result;
+				$scope.pagination.outgoingTotalItems = success.outgoingEndPointForm.totalItems;
 				//alert($scope.pagination.totalItems);
 				$scope.pagination.currentOutgoingPage = 1;
 				$scope.alerts.push({type: 'success', msg: 'Outgoing URIs have been succesfuly retrieved'});
 			}
-			else if(data.statusRequestCode == '400') {
+			else if(success.statusRequestCode == '400') {
 				$scope.alerts.push({
 					type: 'danger', 
-					msg: data.statusRequestInfo + '. An error has been occurred while trying to retrieve the outgoing URIs'});
+					msg: success.statusRequestInfo + '. An error has been occurred while trying to retrieve the outgoing URIs'});
 			}
 			else {
-				$scope.alerts.push({type: 'danger', msg: data.statusRequestInfo});
+				$scope.alerts.push({type: 'danger', msg: success.statusRequestInfo});
 			}
 			
 			// Incoming URIs
 			
 			// Checking the response from blazegraph (incoming)
-			if(data.incomingEndPointForm.statusRequestCode == '200') {
+			if(success.incomingEndPointForm.statusRequestCode == '200') {
 				
-				$scope.incomingEndPointForm = data.incomingEndPointForm;
-				$scope.incomingEndpointResult = data.incomingEndPointForm.result;
-				$scope.pagination.incomingTotalItems = data.incomingEndPointForm.totalItems;
+				$scope.incomingEndPointForm = success.incomingEndPointForm;
+				$scope.incomingEndpointResult = success.incomingEndPointForm.result;
+				$scope.pagination.incomingTotalItems = success.incomingEndPointForm.totalItems;
 				$scope.pagination.currentIncomingPage = 1;
 				$scope.alerts.push({type: 'success', msg: 'Incoming URIs have been succesfuly retrieved'});
 			}
-			else if(data.statusRequestCode == '400') {
+			else if(success.statusRequestCode == '400') {
 				$scope.alerts.push({
 					type: 'danger', 
-					msg: data.statusRequestInfo + '. An error has been occurred while trying to retrieve the incoming URIs'});
+					msg: success.statusRequestInfo + '. An error has been occurred while trying to retrieve the incoming URIs'});
 			}
 			else {
-				$scope.alerts.push({type: 'danger', msg: data.statusRequestInfo});
+				$scope.alerts.push({type: 'danger', msg: success.statusRequestInfo});
 			}
 			
 			modalInstance.close();
 			//$location.path('/explore');
 			
-		}).error(function(data, status, headers, config) {
+		},function (error) {
 		    var message = 'There was a network error. Try again later.';
 			alert("failure message: " + message + "\n" + JSON.stringify({
-				data : data
+				data : error.data
 			}));
 			////modalInstance.close();
 		});		
@@ -167,21 +167,21 @@ app.controller('exploreController', [ '$scope', '$http', 'modalService', '$locat
 		
 		// Retrieve rdf.base
 		submitQueryService.getRdfBase()
-		.success(function(data, status, headers, config) {
+		.then(function(success) {
 			// Example:			http://localhost:8080/root/E1.CRM_Entity
 			// rdfBase:			http://localhost:8080
 			// rdfAfterbase:	root
-			$scope.rdfBase = data.rdfBase;
-			$scope.rdfAfterbase = data.rdfAfterbase;
+			$scope.rdfBase = success.rdfBase;
+			$scope.rdfAfterbase = success.rdfAfterbase;
 			
 			// Actions regarding explorer:
 			$scope.headingTitle = "Explore URIs";
 			$scope.retrieveAsyncOutgoingIncomingURIsJSON($routeParams.type, decodeURIComponent($routeParams.uri));
 			//$scope.welcomeFunc();
-		}).error(function(data, status, headers, config) {
+		} ,function (error) {
 		    $scope.message2 = 'There was a network error. Try again later.';
 			alert("failure message: There was a network error. Try again later.\n" + JSON.stringify({
-				data : data
+				data : error.data
 			}));
 		});
 	}
@@ -191,21 +191,21 @@ app.controller('exploreController', [ '$scope', '$http', 'modalService', '$locat
 		
 		// Retrieve rdf.base
 		submitQueryService.getRdfBase()
-		.success(function(data, status, headers, config) {
+		.then(function(success) {
 			// Example:			http://localhost:8080/root/E1.CRM_Entity
 			// rdfBase:			http://localhost:8080
 			// rdfAfterbase:	root
-			$scope.rdfBase = data.rdfBase;
-			$scope.rdfAfterbase = data.rdfAfterbase;
+			$scope.rdfBase = success.rdfBase;
+			$scope.rdfAfterbase = success.rdfAfterbase;
 			
 			// Actions regarding resolver:
 			$scope.headingTitle = "URI Resolver";
 			// Retrieving incoming / outgoing URIs (first page)
 			$scope.retrieveAsyncOutgoingIncomingURIsJSON(5, $scope.rdfBase + '/' + $scope.rdfAfterbase + '/' + $routeParams.uriToResolve);
-		}).error(function(data, status, headers, config) {
+		} ,function (error) {
 		    $scope.message2 = 'There was a network error. Try again later.';
 			alert("failure message: There was a network error. Try again later.\n" + JSON.stringify({
-				data : data
+				data : error.data
 			}));
 		});
 	}
@@ -263,12 +263,12 @@ app.controller("ResultCtrl", [ '$scope', '$http', 'modalService', 'submitQuerySe
 		}
 		
 		submitQueryService.getPageResults(pageParams)
-		.success(function(data, status, headers, config) {
-			$scope.endpointResult = data.result;
-		}).error(function(data, status, headers, config) {
+		.then(function(success) {
+			$scope.endpointResult = success.result;
+		} ,function (error) {
 		    $scope.message2 = 'There was a network error. Try again later.';
 			alert("failure message: " + message2 + "\n" + JSON.stringify({
-				data : data
+				data : error.data
 			}));
 		});
 	}
@@ -283,12 +283,12 @@ app.controller("ResultCtrl", [ '$scope', '$http', 'modalService', 'submitQuerySe
 		
 		// First, we retrieve rdf.base
 		submitQueryService.getRdfBase()
-		.success(function(data, status, headers, config) {
+		.then(function(success) {
 			// Example:			http://localhost:8080/root/E1.CRM_Entity
 			// rdfBase:			http://localhost:8080
 			// rdfAfterbase:	root
-			$scope.rdfBase = data.rdfBase;
-			$scope.rdfAfterbase = data.rdfAfterbase;
+			$scope.rdfBase = success.rdfBase;
+			$scope.rdfAfterbase = success.rdfAfterbase;
 			
 			// Then do some Submit stuff
 		
@@ -309,34 +309,33 @@ app.controller("ResultCtrl", [ '$scope', '$http', 'modalService', 'submitQuerySe
 				var modalInstance = modalService.showModal(modalDefaults, modalOptions);
 				
 				submitQueryService.getQueryResults(dataObj)
-				.success(function(data, status, headers, config) {
+				.then(function(success) {
 					
-					$scope.statusRequestInfo = data.statusRequestInfo;
+					$scope.statusRequestInfo = success.statusRequestInfo;
 					$scope.queryList.push({ 'query':$scope.query, 'statusRequestInfo':$scope.statusRequestInfo });
 					
 					// Close alerts
 					$scope.alerts.splice(0);
 					
 					// Checking the response from blazegraph
-					if(data.statusRequestCode == '200') {
-						$scope.lastEndPointForm = data;
-						$scope.endpointResult = data.result;
-						$scope.totalItems = data.totalItems;
+					if(success.statusRequestCode == '200') {
+						$scope.lastEndPointForm = success;
+						$scope.endpointResult = success.result;
+						$scope.totalItems = success.totalItems;
 						$scope.currentPage = 1;
 						$scope.alerts.push({type: 'success', msg: 'The query was submitted succesfuly'});
 					}
-					else if(data.statusRequestCode == '400') {
-						$scope.alerts.push({type: 'danger', msg: data.statusRequestInfo + '. Please check the query for syntax errors and try again.'});
+					else if(success.statusRequestCode == '400') {
+						$scope.alerts.push({type: 'danger', msg: success.statusRequestInfo + '. Please check the query for syntax errors and try again.'});
 					}
 					else {
-						$scope.alerts.push({type: 'danger', msg: data.statusRequestInfo});
+						$scope.alerts.push({type: 'danger', msg: success.statusRequestInfo});
 					}
 					modalInstance.close();
-				})
-				.error(function() {
+				}, function (success) {
 					$scope.message = 'There was a network error. Try again later.';
 					alert("failure message: " + message + "\n" + JSON.stringify({
-						data : data
+						data : success
 					}));
 					modalInstance.close();
 				});
@@ -345,10 +344,10 @@ app.controller("ResultCtrl", [ '$scope', '$http', 'modalService', 'submitQuerySe
 			
 			// Submit stuff Ends here
 			
-		}).error(function(data, status, headers, config) {
+		} ,function (error) {
 		    $scope.message2 = 'There was a network error. Try again later.';
 			alert("failure message: There was a network error. Try again later.\n" + JSON.stringify({
-				data : data
+				data : error.data
 			}));
 		});
 		

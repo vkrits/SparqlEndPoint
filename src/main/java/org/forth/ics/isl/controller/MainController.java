@@ -108,7 +108,7 @@ public class MainController {
     	outgoingEndPointForm.setItemsPerPage(itemsPerPage);
     	
     	// Setting query
-    	String outgoingQueryStr = "select * where {<" + uri + "> ?p ?o}";
+    	String outgoingQueryStr = "select * where {<" + uri + "> ?Property ?Object}";
     	outgoingEndPointForm.setQuery(outgoingQueryStr);
     	
     	// Retrieving items based on query an holding them in EndPointForm POJO
@@ -139,7 +139,7 @@ public class MainController {
     	incomingEndPointForm.setItemsPerPage(itemsPerPage);
     	
     	// Setting query
-    	String incomingQueryStr = "select * where { ?s ?p <" + incomingOutgoingURIs.getUri() + ">}";
+    	String incomingQueryStr = "select * where { ?Subject ?Property <" + incomingOutgoingURIs.getUri() + ">}";
     	incomingEndPointForm.setQuery(incomingQueryStr);
     	
     	// Retrieving items based on query an holding them in EndPointForm POJO
@@ -266,7 +266,7 @@ public class MainController {
     	outgoingEndPointForm.setItemsPerPage(itemsPerPage);
     	
     	// Setting query
-    	String outgoingQueryStr = "select * where {<" + uri + "> ?p ?o}";
+    	String outgoingQueryStr = "select * where {<" + uri + "> ?Property ?Object}";
     	outgoingEndPointForm.setQuery(outgoingQueryStr);
     	
     	// Retrieving items based on query an holding them in EndPointForm POJO
@@ -297,7 +297,7 @@ public class MainController {
     	incomingEndPointForm.setItemsPerPage(itemsPerPage);
     	
     	// Setting query
-    	String incomingQueryStr = "select * where { ?s ?p <" + incomingOutgoingURIs.getUri() + ">}";
+    	String incomingQueryStr = "select * where { ?Subject ?Property <" + incomingOutgoingURIs.getUri() + ">}";
     	incomingEndPointForm.setQuery(incomingQueryStr);
     	
     	// Retrieving items based on query an holding them in EndPointForm POJO

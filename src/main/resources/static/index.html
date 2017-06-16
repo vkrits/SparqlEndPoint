@@ -10,29 +10,25 @@
     <title>VRE4EIC Sparql Endpoint & Resolver</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/css/app.css">
-</head>
-<body>
-<h2>VRE4EIC Sparql Endpoint</h2>
-<div class="home-section">
-    <ul class="menu-list">
-        <li><a href="/query">Query</a></li>
-        <li><a href="/roles">Roles</a></li>
-    </ul>
-</div>
-<div ng-view></div>
-
-<link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.css">
-<link rel="stylesheet" href="/webjars/codemirror/5.22.2/lib/codemirror.css">
-
-<script src="/webjars/angularjs/1.5.7/angular.min.js"></script>
-<script src="/webjars/angularjs/1.5.7/angular-resource.js"></script>
-<script src="/webjars/angularjs/1.5.7/angular-route.js"></script>
-<script src="/webjars/angularjs/1.5.7/angular-animate.js"></script>
-<script src="/webjars/codemirror/5.22.2/lib/codemirror.js"></script>
-<script src="/webjars/codemirror/5.22.2/mode/sparql/sparql.js"></script>
-<script src="/webjars/angular-ui-bootstrap/2.1.3/dist/ui-bootstrap-tpls.js"></script>
-<script src="/webjars/angular-ui-codemirror/0.3.0/ui-codemirror.min.js"></script>
+    
+    
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.css">
+	<link rel="stylesheet" href="/webjars/codemirror/5.26.0/lib/codemirror.css">
+	<link rel="stylesheet" type="text/css" href="webjars/angular-material/1.1.4/angular-material.css">
+	
+	<script src="/webjars/angularjs/1.6.4/angular.min.js"></script>
+	<script src="/webjars/angularjs/1.6.4/angular-resource.js"></script>
+	<script src="/webjars/angularjs/1.6.4/angular-route.js"></script>
+	<script src="/webjars/angularjs/1.6.4/angular-animate.js"></script>
+	
+	<script src="/webjars/codemirror/5.26.0/lib/codemirror.js"></script>
+	<script src="/webjars/codemirror/5.26.0/mode/sparql/sparql.js"></script>
+	<script src="/webjars/angular-ui-bootstrap/2.1.3/dist/ui-bootstrap-tpls.js"></script>
+	<script src="/webjars/angular-ui-codemirror/0.3.0/ui-codemirror.min.js"></script>
+	<script src="/webjars/angular-material/1.1.4/angular-material.min.js"></script>
+	
+	<link rel="stylesheet" href="/css/app.css">
+	
 <!--
 <script src="js/lib/lazy-scroll.min.js"></script>
 -->
@@ -40,6 +36,29 @@
 <script src="/js/controller.js"></script>
 <script src="/js/modalService.js"></script>
 <script src="/js/endpointService.js"></script>
+    
+</head>
+<body>
+
+<div id="popupContainer">
+	<md-toolbar class="md-hue-2" style="background-color:rgb(250, 250, 250)">
+		<div class="md-toolbar-tools row" layout-padding>
+			<img src="/images/logo-vre4eic-modern.svg" alt="VRE4EIC" width="256"/style="padding-right:10px;">
+			<span style="padding-left:20px;color:black;font-size:30px;" flex>Sparql Endpoint</span>
+		</div>
+	</md-toolbar>
+</div>
+
+
+<div class="home-section">
+    <ul class="menu-list">
+        <a href="/query">Query</a>
+        <!--<li><a href="/roles">Roles</a></li>-->
+    </ul>
+</div>
+<div ng-view></div>
+
+
 
 
 </body>
