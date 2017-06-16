@@ -42,8 +42,16 @@
 	<div>
 		<table class="table table-striped table-condensed table-hover scrollTable">
 			<thead>
+				<!-- Unfortunately the response from blazegraph returns the headers not being in sync with the results -->
+				<!--  
 				<tr class="ng-scope">
 					<th ng-repeat="head in lastEndPointForm.result.head.vars">{{head}}</th>
+				</tr>
+				-->
+				<tr ng-repeat="item in lastEndPointForm.result.results|limitTo:1" class="ng-scope">
+					<th ng-repeat="(key,val) in item" class="ng-binding">
+						{{key}} 
+					</th>
 				</tr>
 			</thead>
 			<tfoot>

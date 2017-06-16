@@ -18,10 +18,10 @@ angular.module('app.mainServices', [])
 					'Content-Type' : 'application/json'
 				},
 				'data' : dataObj
-			}).success(function(data, status, headers, config) {
-				return data;
-			})
-			.error(function(err) {
+			}).then(function(success) {
+				return success.data;
+			}, function (error) {
+				//error code
 			});
 
 		},
@@ -34,10 +34,10 @@ angular.module('app.mainServices', [])
 					'Content-Type' : 'application/json'
 				},
 				'params' : pageParams
-			}).success(function(data, status, headers, config) {
-				return data;
-			})
-			.error(function(err) {
+			}).then(function(success) {
+				return success.data;
+			}, function (error) {
+				//error code
 			});
 		},
 		
@@ -49,10 +49,10 @@ angular.module('app.mainServices', [])
 					'Content-Type' : 'application/json'
 				},
 				'params' : dataObj
-			}).success(function(data, status, headers, config) {
-				return data;
-			})
-			.error(function(err) {
+			}).then(function(success) {
+				return success.data;
+			}, function (error) {
+				//error code
 			});
 		},
 		getRdfBase : function() {
@@ -62,10 +62,10 @@ angular.module('app.mainServices', [])
 				'headers' : {
 					'Content-Type' : 'application/json'
 				}
-			}).success(function(data, status, headers, config) {
-				return data;
-			})
-			.error(function(err) {
+			}).then(function(success) {
+				return success.data;
+			}, function (error) {
+				//error code
 			});
 		}
 	}
