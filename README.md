@@ -1,4 +1,4 @@
-# README #
+# SPARQL Endpoint - Reslover #
 
 This is a Spring MVC (SpringBootApplication) + AngularJS project that implements a clinet for a Blazegraph Endpoint Repository.
 
@@ -11,7 +11,7 @@ This is a Spring MVC (SpringBootApplication) + AngularJS project that implements
 
 #### Requirements ####
 
-A Blazegraph running instance.
+A Virtuoso triple store running instance.
 
 #### In eclipse (or any other IDE) ####
 
@@ -73,7 +73,7 @@ URL should be structured as:
 ##### Example #####
 
 config.property file:
-triplestore.url = <span>http</span>://83.212.97.61:9999/blazegraph
+triplestore.url = <span>http</span>://83.212.97.61:8890/sparql
 triplestore.namespace = test
 rdf.base = <span>http</span>://83.212.97.61:8090
 rdf.afterbase = localtest
@@ -89,7 +89,3 @@ $routeProvider
 URL should be structured as:
 
 * <span>http</span>://83.212.97.61:8090/localtest/E37.Mark
-
-### Who do I talk to? ###
-
-* Vangelis Kritsotakis
